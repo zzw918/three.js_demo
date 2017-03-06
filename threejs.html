@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>threejs</title>
+	<!-- <script src="http://cdn.bootcss.com/jquery/3.1.1/core.js"></script> -->
+	<!-- 引入jqury简化js复杂的操作，可以引入，但不是必须的 -->
+	<script src="http://cdn.bootcss.com/three.js/r83/three.js"></script>	
+	<!-- 引入threejs核心库，必须的 -->
+	<style>
+		body{
+			margin:0;
+			overflow: hidden;
+			cursor: move;
+		}
+		/*这里设置margin:0; 和overflow:hidden; 可以保证移除所有的滚动条*/
+	</style>
+</head>
+<body>
+	<div class="webgl_output">
+		
+	</div>
+
+	<script>
+		// $(function () {
+			// here we run the there.js
+
+
+
+// 基础工作
+			var scene = new THREE.Scene();
+			// 创建一个THREE的场景，场景就是我们最终看到的，也就是我们描绘三维图图形的地方，可以看出THREE类似一个对象，我们使用其下的方法
+
+			var camera = new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,0.1,1000);
+			// 创建一个相机，虽然有场景，但是看不到啊，必须指定一个相机，通过相机我们可以看到场景的内容。
+			// 这里的55可以理解为举例，值越大，我们看到的场景月
+			var renderer = new THREE.WebGLRenderer();
+			// 创建一个渲染器
+			renderer.setClearColor(0x111111);
+			// 注意，之前的版本是setClearColorHex，现在只有setClearColor可以使用，可以去查看源码
+			// 将scene的背景色设置为eeeeee
+			renderer.setSize(window.innerWidth,window.innerHeight);
+			// 设置scene的尺寸
+
+			//  这时，我们就已经创建了场景（买了一块空地）、 一个相机（通过眼睛观察这块地）、一个渲染器（用户施工的工具）
+
+
+
+
+
+// 创建一个坐标轴
+			var axes = new THREE.AxisHelper(30);
+			// 这里的30，即创建出的坐标轴的相对长度
+			// 创建一个坐标轴
+			scene.add(axes);
+			// 把坐标轴添加到场景中
+
+
+
+
+
+// 创建一个二维平面
+			var planeGeometry = new THREE.PlaneGeometry(60,25,2,1);
+ 			// 创建一个二维的平面几何形状（这是身体，还没有灵魂），其宽为60，高20，而后面两个参数却几乎没有影响,即使不要也是可以的
+
+			var planeMaterial = new THREE.MeshBasicMaterial({color:0xff0000});
+			// 创建一个材质，颜色为红色，这里便是几何形状的灵魂。
+
+			var plane = new THREE.Mesh(planeGeometry,planeMaterial);
+			// 使用Mesh将创建的二维平面和材质结合起来
+
+			plane.rotation.x =-0.5*Math.PI;
+			plane.rotation.y =-0.1*Math.PI;
+			// 将平面沿着x轴旋转-90度，这里的旋转和CSS3中的3d旋转是一样的。
+
+			plane.position.x = 0;
+			plane.position.y = 0;
+			plane.position.z = 0;
+			//确定这个平面在坐标轴的位置
+
+			scene.add(plane);
+			// 刚才它是一个孤魂野鬼，现在将之将平面置于场景中
+
+
+
+
+
+// 创建一个方块
+			var cubeGeometry = new THREE.CubeGeometry(4,4,4);
+			// 创建一个方块的几何形状
+			var cubeMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00,wireframe: true});
+			// 创建好一个方块的材质
+			var cube = new THREE.Mesh(cubeGeometry,cubeMaterial);
+			// 把它的形体和它的灵魂相结合，这时他就是一个完整的人
+
+			cube.position.x = -4;
+			cube.position.y = 10;
+			cube.position.z = 15;
+			// 同样的，得指定它在坐标系中的位置。
+
+			scene.add(cube);
+			//同上，创建好之后，它只是一个孤魂野鬼，必须把它加在这个场景中
+
+
+
+
+
+// 创建一个球体
+			var sphereGeometry = new THREE.SphereGeometry(8,20,20);
+			// 创建一个球体壳
+
+			var sphereMaterial = new THREE.MeshBasicMaterial({color: 0x7777ff,wireframe:true});
+			// 创建一个球体的灵魂
+
+			var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
+			// 将形体和灵魂相结合
+
+			sphere.position.x = 20;
+			sphere.position.y = 12;
+			sphere.position.z = -20;
+			// 指定球体的位置
+
+			scene.add(sphere);
+			//将球体放在场景中
+
+
+			//  最开始我们确实创建了一个相机，但是并没有将之放在场景中，所以我们是看不到的。
+			camera.position.x = -30;
+			camera.position.y = 4;
+			camera.position.z = 2;
+			// 这样就确定了其位置
+
+			camera.lookAt(scene.position);
+			// 指定观察的方位
+
+			var dom = document.querySelector(".webgl_output");
+			dom.append(renderer.domElement);
+			// renderer是一个渲染器，将渲染器得到的dom添加到div中
+			// 将camera放在场景中，这样就可以看到了
+
+			renderer.render(scene,camera);
+
+
+
+		// });
+	</script>
+</body>
+</html>
+
+
+<!-- 注意点material不要拼错了，16进制的是0x，而不是ox -->
